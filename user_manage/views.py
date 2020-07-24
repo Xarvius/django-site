@@ -1,13 +1,16 @@
-from django.shortcuts import render
-from user_manage.forms import UserForm, UserProfileForm
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, login
 from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render
 from django.urls import reverse
+
+from django_server.settings import TEMPLATE_DIR
+from user_manage.forms import UserForm, UserProfileForm
+
 
 # Create your views here.
 
 def home(request):
-    return render(request, 'templates/_homepage.html')
+    return render(request, f'{TEMPLATE_DIR}/_homepage.html')
 
 def register(request):
     registered = False
@@ -28,7 +31,7 @@ def register(request):
     else:
         user_form = UserForm()
         profile_form = UserProfileForm()
-    return render(request, 'templates/pages/register.html',
+    return render(request, f'{TEMPLATE_DIR}/pages/register.html',
                   {'user_form':user_form,
                    'profile_form':profile_form,
                    registered:registered
@@ -49,4 +52,4 @@ def user_login(request):
             print('Failed login', f'on user:{username} pass:{password}')
             return HttpResponse('Invalid login')
     else:
-        return render(request, 'templates/pages/login.html')
+        return render(request, f'{TEMPLATE_DIR}/pages/login.html')
