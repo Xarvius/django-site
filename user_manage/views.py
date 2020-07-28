@@ -1,4 +1,5 @@
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth.decorators import login_required
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render
 from django.urls import reverse
@@ -10,7 +11,12 @@ from user_manage.forms import UserForm, UserProfileForm
 # Create your views here.
 
 def home(request):
-    return render(request, f'{TEMPLATE_DIR}/_homepage.html')
+    return render(request, f'{TEMPLATE_DIR}/_homepage.html', {})
+
+@login_required
+def user_logout(request):
+    logout(request)
+    return HttpResponseRedirect(reverse('home'))
 
 def register(request):
     registered = False
@@ -34,7 +40,7 @@ def register(request):
     return render(request, f'{TEMPLATE_DIR}/pages/register.html',
                   {'user_form':user_form,
                    'profile_form':profile_form,
-                   registered:registered
+                   'registered':registered
                    })
 
 def user_login(request):
