@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from datetime import datetime
 
 # Create your models here.
 class UserProfile(models.Model):
@@ -13,7 +14,7 @@ class UserProfile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
     phone = models.IntegerField()
-    date_begin = models.DateField()
+    date_begin = models.DateField(default=datetime.today)
     status = models.CharField(
         max_length=4,
         choices=STATUS_IN,
