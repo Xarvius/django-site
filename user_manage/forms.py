@@ -11,4 +11,9 @@ class UserForm(forms.ModelForm):
 class UserProfileForm(forms.ModelForm):
     class Meta:
         model = UserProfile
-        fields = ('first_name', 'last_name', 'phone', 'date_begin', 'status')
+        fields = ('first_name', 'last_name', 'phone', 'date_begin', 'qualification', 'education', 'publications', 'extras')
+
+    def __init__(self, *args, **kwargs):
+        super(UserProfileForm, self).__init__(*args, **kwargs)
+        self.fields['publications'].required = False
+        self.fields['extras'].required = False

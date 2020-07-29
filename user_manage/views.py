@@ -5,15 +5,14 @@ from django.shortcuts import render
 from django.urls import reverse
 
 from django_server.settings import TEMPLATE_DIR
+from user_manage import models
 from user_manage.forms import UserForm, UserProfileForm
 
-
-# Create your views here.
 
 def home(request):
     return render(request, f'{TEMPLATE_DIR}/_homepage.html', {})
 
-@login_required
+@login_required(login_url='../user_login/')
 def user_logout(request):
     logout(request)
     return HttpResponseRedirect(reverse('home'))
@@ -59,3 +58,19 @@ def user_login(request):
             return HttpResponse('Invalid login')
     else:
         return render(request, f'{TEMPLATE_DIR}/pages/login.html')
+
+@login_required(login_url='../user_login/')
+def user_profile(request):
+    user = request.user
+    instance = models.UserProfile.objects.get(user=user)
+    edited = False
+    if request.method == 'POST':
+        profile_form = UserProfileForm(data=request.POST, instance=instance)
+        profile = profile_form.save(commit=False)
+        profile.user = user
+        profile.save()
+        edited = True
+    else:
+        profile_form = UserProfileForm(instance=instance)
+    return render(request, f'{TEMPLATE_DIR}/pages/profile.html', {'profile_form':profile_form,
+                                                                  'edited':edited})
