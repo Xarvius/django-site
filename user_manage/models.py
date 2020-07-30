@@ -3,6 +3,9 @@ from django.contrib.auth.models import User
 from datetime import datetime
 
 # Create your models here.
+def user_directory_path(instance, filename):
+    return f'user_files/user_{instance.user.id}/{filename}'
+
 class UserProfile(models.Model):
     Engineer = "ST"
     PROFESSOR = "PROF."
@@ -31,5 +34,15 @@ class UserProfile(models.Model):
 
     def __str__(self):
         return self.user.username
+
+class UserFolder(models.Model):
+    name = models.CharField(max_length=25)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+
+class UserFiles(models.Model):
+    file = models.FileField(upload_to=user_directory_path)
+    folder = models.ForeignKey('UserFolder', null=True, on_delete=models.CASCADE)
+
 
 

@@ -19,6 +19,8 @@
           <a class="nav-item nav-link active" href="#">Home <span class="sr-only">(current)</span></a>
           {% if user.is_authenticated %}
             <a class="nav-item nav-link" href="{% url 'user_profile' %}">Profile</a>
+            <a class="nav-item nav-link" href="{% url 'upload_files' %}">Upload file</a>
+            <a class="nav-item nav-link" href="{% url 'create_folder' %}">Create folder</a>
             <a class="nav-item nav-link" href="{% url 'user_logout' %}">Wyloguj</a>
           {% else %}
               <a class="nav-item nav-link" href="{% url 'user_login' %}">Log in</a>
