@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'user_manage',
     'crispy_forms',
+    'graphene_django',
 ]
 
 MIDDLEWARE = [
@@ -130,5 +131,9 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [os.path.join(BASE_DIR, 'static')]
+
 LOGIN_URL = '/user_manage/user_login'
 CRISPY_TEMPLATE_PACK = 'bootstrap4'
+GRAPHENE = {
+    'SCHEMA': 'django_server.schema.schema'
+}

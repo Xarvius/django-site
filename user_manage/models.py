@@ -7,13 +7,13 @@ def user_directory_path(instance, filename):
     return f'user_files/user_{instance.user.id}/{filename}'
 
 class UserProfile(models.Model):
-    Engineer = "ST"
+    Engineer = "inz"
     PROFESSOR = "PROF."
     STATUS_IN = [
         (Engineer, 'Inżynier'),
         ('lic.', "Licencjat"),
         ('mgr', "Magister"),
-        ('mgr inż.', "Magister inżyner"),
+        ('mgr inz.', "Magister inżyner"),
         ('dr', "Doktor"),
         ('dr hab.', "Doktor habilitowany"),
         ('prof.', "Profesor"),
