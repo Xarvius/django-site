@@ -45,6 +45,7 @@ INSTALLED_APPS = [
     'user_manage',
     'crispy_forms',
     'graphene_django',
+    'corsheaders'
 ]
 
 MIDDLEWARE = [
@@ -55,6 +56,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
 ]
 
 ROOT_URLCONF = 'django_server.urls'
@@ -137,3 +139,10 @@ CRISPY_TEMPLATE_PACK = 'bootstrap4'
 GRAPHENE = {
     'SCHEMA': 'django_server.schema.schema'
 }
+
+CORS_ORIGIN_WHITELIST = [
+    'http://localhost:8080',
+    'https://localhost:8080',
+    ]
+
+CORS_ALLOW_CREDENTIALS = True
