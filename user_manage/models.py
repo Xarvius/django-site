@@ -7,7 +7,12 @@ def user_directory_path(instance, filename):
     return f'user_files/user_{instance.user.id}/{filename}'
 
 class UserProfile(models.Model):
-    Engineer = "inz"
+    first_name = models.CharField(max_length=30)
+    last_name = models.CharField(max_length=30)
+    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    phone = models.IntegerField()
+    email = models.EmailField(max_length=254, default="-")
+    Engineer = "inz."
     PROFESSOR = "PROF."
     STATUS_IN = [
         (Engineer, 'Inżynier'),
@@ -18,19 +23,12 @@ class UserProfile(models.Model):
         ('dr hab.', "Doktor habilitowany"),
         ('prof.', "Profesor"),
     ]
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
-    first_name = models.CharField(max_length=30)
-    last_name = models.CharField(max_length=30)
-    phone = models.IntegerField()
-    date_begin = models.DateField(default=datetime.today)
     qualification = models.CharField(
         max_length=8,
         choices=STATUS_IN,
         default=Engineer
     )
-    education = models.TextField(default='-')
-    publications = models.TextField(default='-')
-    extras = models.TextField(default='-')
+    USOSlink = models.URLField(max_length=200, default="-")
 
     def __str__(self):
         return self.user.username
@@ -39,10 +37,27 @@ class UserFolder(models.Model):
     name = models.CharField(max_length=25)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
 
-
 class UserFiles(models.Model):
     file = models.FileField(upload_to=user_directory_path)
     folder = models.ForeignKey('UserFolder', null=True, on_delete=models.CASCADE)
 
+class UserExtras(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    intro = models.TextField()
+    extras = models.TextField()
+    education = models.TextField()
+    hobbies = models.TextField()
+
+class Results(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    file_name = models.CharField(max_length=30)
 
 
+class UserPublications(models.Model):
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    info = models.TextField()
+
+# class UserOptions(models.Model):
+#     user = models.ForeignKey(User, on_delete=models.CASCADE)
+#     results = models.BooleanField(**options)
+#     menu
