@@ -2,13 +2,12 @@
 {% load crispy_forms_tags %}
 
 {% block content %}
-<h1>Create {{ user }}'s folder:</h1>
     {% if saved %}
         <p>Success</p>
     {% endif %}
-        <form method="post" action={% url 'create_folder' %}>
+        <form enctype="multipart/form-data" method="post" action={% url 'create_publications' %}>
             {% csrf_token %}
-            {{ folder_form|crispy }}
+            {{ publications_form|crispy }}
             <input type="submit" class="btn btn-primary" value="Save">
         </form>
 {% endblock %}

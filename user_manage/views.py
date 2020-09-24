@@ -6,7 +6,8 @@ from django.urls import reverse
 
 from django_server.settings import TEMPLATE_DIR
 from user_manage import models
-from user_manage.forms import UserForm, UserProfileForm, UserFolderForm, UserFilesForm
+from user_manage.forms import UserForm, UserProfileForm, UserFolderForm, UserFilesForm, UserExtrasForm, ResultsForm, \
+    UserPublicationsForm
 
 
 def home(request):
@@ -105,4 +106,52 @@ def create_folder(request):
     else:
         folder_form = UserFolderForm()
     return render(request, f'{TEMPLATE_DIR}/pages/create_folder.html', {'folder_form':folder_form,
+                                                                       'saved':saved})
+
+@login_required(login_url='../user_extras/')
+def create_extras(request):
+    user = request.user
+    saved = False
+    if request.method == 'POST':
+        extras_form = UserExtrasForm(data=request.POST)
+        if extras_form.is_valid():
+            extras = extras_form.save(commit=False)
+            extras.user = user
+            extras.save()
+            saved = True
+    else:
+        extras_form = UserExtrasForm()
+    return render(request, f'{TEMPLATE_DIR}/pages/extras.html', {'extras_form':extras_form,
+                                                                       'saved':saved})
+
+@login_required(login_url='../exam_results/')
+def upload_results(request):
+    user = request.user
+    saved = False
+    if request.method == 'POST':
+        results_form = ResultsForm(data=request.POST)
+        if results_form.is_valid():
+            results = results_form.save(commit=False)
+            results.user = user
+            results.save()
+            saved = True
+    else:
+        results_form = ResultsForm()
+    return render(request, f'{TEMPLATE_DIR}/pages/results.html', {'results_form':results_form,
+                                                                       'saved':saved})
+
+@login_required(login_url='../publications/')
+def create_publications(request):
+    user = request.user
+    saved = False
+    if request.method == 'POST':
+        publications_form = UserPublicationsForm(data=request.POST)
+        if publications_form.is_valid():
+            publications = publications_form.save(commit=False)
+            publications.user = user
+            publications.save()
+            saved = True
+    else:
+        publications_form = UserPublicationsForm()
+    return render(request, f'{TEMPLATE_DIR}/pages/publications.html', {'publications_form':publications_form,
                                                                        'saved':saved})

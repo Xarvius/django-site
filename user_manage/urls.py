@@ -10,4 +10,7 @@ urlpatterns = [
     path('user_profile/', views.user_profile, name='user_profile'),
     path('upload_files/', views.upload_files, name='upload_files'),
     path('create_folder/', views.create_folder, name='create_folder'),
+    path('user_extras/', views.create_extras, name='create_extras'),
+    path('exam_results/', views.upload_results, name='upload_results'),
+    path('user_publications/', views.create_publications, name='create_publications'),
 ]

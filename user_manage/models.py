@@ -51,7 +51,7 @@ class UserExtras(models.Model):
 class Results(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     file_name = models.CharField(max_length=30)
-
+    file = models.FileField(upload_to=user_directory_path, default="-")
 
 class UserPublications(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)

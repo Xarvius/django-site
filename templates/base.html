@@ -21,6 +21,9 @@
             <a class="nav-item nav-link" href="{% url 'user_profile' %}">Profile</a>
             <a class="nav-item nav-link" href="{% url 'upload_files' %}">Upload file</a>
             <a class="nav-item nav-link" href="{% url 'create_folder' %}">Create folder</a>
+            <a class="nav-item nav-link" href="{% url 'create_extras' %}">Create extras</a>
+            <a class="nav-item nav-link" href="{% url 'upload_results' %}">Upload results</a>
+            <a class="nav-item nav-link" href="{% url 'create_publications' %}">Create publications</a>
             <a class="nav-item nav-link" href="{% url 'user_logout' %}">Wyloguj</a>
           {% else %}
               <a class="nav-item nav-link" href="{% url 'user_login' %}">Log in</a>

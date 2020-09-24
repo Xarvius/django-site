@@ -15,8 +15,6 @@ class UserProfileForm(forms.ModelForm):
 
     def __init__(self, *args, **kwargs):
         super(UserProfileForm, self).__init__(*args, **kwargs)
-        self.fields['publications'].required = False
-        self.fields['extras'].required = False
 
 class UserFolderForm(forms.ModelForm):
     class Meta:
@@ -32,10 +30,15 @@ class UserFilesForm(forms.ModelForm):
         super(UserFilesForm, self).__init__(*args, **kwargs)
         self.fields['folder'].label_from_instance = lambda obj: f"{obj.name}"
 
+class UserExtrasForm(forms.ModelForm):
+    class Meta:
+        model = UserExtras
+        fields = ('intro', 'extras', 'education', 'hobbies')
+
 class ResultsForm(forms.ModelForm):
     class Meta:
         model = Results
-        fields = ('file_name',)
+        fields = ('file_name', 'file')
 
 class UserPublicationsForm(forms.ModelForm):
     class Meta:
