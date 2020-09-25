@@ -108,7 +108,7 @@ def create_folder(request):
     return render(request, f'{TEMPLATE_DIR}/pages/create_folder.html', {'folder_form':folder_form,
                                                                        'saved':saved})
 
-@login_required(login_url='../user_extras/')
+@login_required(login_url='../user_login/')
 def create_extras(request):
     user = request.user
     saved = False
@@ -124,7 +124,7 @@ def create_extras(request):
     return render(request, f'{TEMPLATE_DIR}/pages/extras.html', {'extras_form':extras_form,
                                                                        'saved':saved})
 
-@login_required(login_url='../exam_results/')
+@login_required(login_url='../user_login/')
 def upload_results(request):
     user = request.user
     saved = False
@@ -140,7 +140,7 @@ def upload_results(request):
     return render(request, f'{TEMPLATE_DIR}/pages/results.html', {'results_form':results_form,
                                                                        'saved':saved})
 
-@login_required(login_url='../publications/')
+@login_required(login_url='../user_login/')
 def create_publications(request):
     user = request.user
     saved = False
