@@ -9,7 +9,7 @@ def user_directory_path(instance, filename):
 class UserProfile(models.Model):
     first_name = models.CharField(max_length=30)
     last_name = models.CharField(max_length=30)
-    user = models.OneToOneField(User, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.IntegerField()
     email = models.EmailField(max_length=254, default="-")
     Engineer = "inz."

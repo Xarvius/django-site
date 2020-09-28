@@ -1,24 +1,27 @@
 import graphene
 from graphene_django.types import DjangoObjectType
-
+from django.contrib.auth.models import User
 from user_manage.models import UserProfile, UserFolder, UserFiles, UserExtras, Results, UserPublications
 
+class UserType(DjangoObjectType):
+    class Meta:
+        model = User
+        fields = ('id', )
 
 class UserProfileType(DjangoObjectType):
-    repository_url = graphene.Field(graphene.String)
     class Meta:
         model = UserProfile
-        fields  = ('first_name', 'last_name', 'phone', 'email', 'qualification', 'USOSlink')
+        fields  = ('first_name', 'last_name', 'user', 'phone', 'email', 'qualification', 'USOSlink')
 
-    def resolve_repository_url(self, info):
-        return self.repository_url
+    # def resolve_repository_url(self, info):
+    #     return self.repository_url
 
 class UserFolderType(DjangoObjectType):
     repository_url = graphene.Field(graphene.String)
 
     class Meta:
         model = UserFolder
-        fields = ('name',)
+        fields = ('name', 'user')
 
     def resolve_repository_url(self, info):
         return self.repository_url
@@ -38,7 +41,7 @@ class UserExtrasType(DjangoObjectType):
 
     class Meta:
         model = UserExtras
-        fields = ('intro', 'extras', 'education', 'hobbies')
+        fields = ('user', 'intro', 'extras', 'education', 'hobbies')
 
     def resolve_repository_url(self, info):
         return self.repository_url
@@ -48,7 +51,7 @@ class ResultsType(DjangoObjectType):
 
     class Meta:
         model = Results
-        fields = ('file_name', 'file')
+        fields = ('user', 'file_name', 'file')
 
     def resolve_repository_url(self, info):
         return self.repository_url
@@ -58,22 +61,23 @@ class UserPublicationsType(DjangoObjectType):
 
     class Meta:
         model = UserPublications
-        fields = ('info',)
+        fields = ('user', 'info',)
 
     def resolve_repository_url(self, info):
         return self.repository_url
 
 class Query(graphene.ObjectType):
-    profile = graphene.Field(UserProfileType, last_name=graphene.String(required=True))
+    profile = graphene.Field(UserProfileType, first_name = graphene.String(required=True),
+                             last_name=graphene.String(required=True))
     folders = graphene.List(UserFolderType)
     files = graphene.List(UserFilesType)
     extras = graphene.List(UserExtrasType)
     results = graphene.List(ResultsType)
     publications = graphene.List(UserPublicationsType)
 
-    def resolve_profile(self, info, last_name):
+    def resolve_profile(self, info, first_name, last_name):
         try:
-            return UserProfile.objects.get(last_name=last_name)
+            return UserProfile.objects.get(first_name = first_name, last_name=last_name)
         except UserProfile.DoesNotExist:
             return none
 

@@ -138,7 +138,7 @@ def upload_results(request):
     else:
         results_form = ResultsForm()
     return render(request, f'{TEMPLATE_DIR}/pages/results.html', {'results_form':results_form,
-                                                                       'saved':saved})
+                                                                   'saved':saved})
 
 @login_required(login_url='../user_login/')
 def create_publications(request):
