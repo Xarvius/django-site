@@ -11,7 +11,7 @@ class UserType(DjangoObjectType):
 class UserProfileType(DjangoObjectType):
     class Meta:
         model = UserProfile
-        fields  = ('first_name', 'last_name', 'user', 'phone', 'email', 'qualification', 'USOSlink')
+        fields  = ('id', 'first_name', 'last_name', 'user', 'phone', 'email', 'qualification', 'USOSlink')
 
     # def resolve_repository_url(self, info):
     #     return self.repository_url
@@ -67,19 +67,22 @@ class UserPublicationsType(DjangoObjectType):
         return self.repository_url
 
 class Query(graphene.ObjectType):
-    profile = graphene.Field(UserProfileType, first_name = graphene.String(required=True),
-                             last_name=graphene.String(required=True))
+    profile = graphene.Field(UserProfileType, id= graphene.ID())
+    profiles = graphene.List(UserProfileType)
     folders = graphene.List(UserFolderType)
     files = graphene.List(UserFilesType)
     extras = graphene.List(UserExtrasType)
     results = graphene.List(ResultsType)
-    publications = graphene.List(UserPublicationsType)
+    publications = graphene.List(UserPublicationsType, id=graphene.ID())
 
-    def resolve_profile(self, info, first_name, last_name):
+    def resolve_profile(self, info, id):
         try:
-            return UserProfile.objects.get(first_name = first_name, last_name=last_name)
+            return UserProfile.objects.get(id=id)
         except UserProfile.DoesNotExist:
             return none
+
+    def resolve_profiles(self, info, **kwargs):
+        return UserProfile.objects.all()
 
     def resolve_folders(self, info, **kwargs):
         return UserFolder.objects.all()
@@ -93,7 +96,7 @@ class Query(graphene.ObjectType):
     def resolve_results(self, info, **kwargs):
         return Results.objects.all()
 
-    def resolve_publications(self, info, **kwargs):
-        return UserPublications.objects.all()
+    def resolve_publications(self, info, id):
+        return UserPublications.objects.filter(user_id=id)
 
 schema = graphene.Schema(query=Query)
