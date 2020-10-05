@@ -61,7 +61,7 @@ class UserPublicationsType(DjangoObjectType):
 
     class Meta:
         model = UserPublications
-        fields = ('user', 'info',)
+        fields = ('id', 'info',)
 
     def resolve_repository_url(self, info):
         return self.repository_url
@@ -77,9 +77,9 @@ class Query(graphene.ObjectType):
 
     def resolve_profile(self, info, id):
         try:
-            return UserProfile.objects.get(id=id)
+            return UserProfile.objects.get(user_id=id)
         except UserProfile.DoesNotExist:
-            return none
+            return UserProfile.objects.none()
 
     def resolve_profiles(self, info, **kwargs):
         return UserProfile.objects.all()
