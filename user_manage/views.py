@@ -8,6 +8,7 @@ from django_server.settings import TEMPLATE_DIR
 from user_manage import models
 from user_manage.forms import UserForm, UserProfileForm, UserFolderForm, UserFilesForm, UserExtrasForm, ResultsForm, \
     UserPublicationsForm
+from user_manage.models import UserProfile
 
 
 def home(request):
@@ -155,3 +156,7 @@ def create_publications(request):
         publications_form = UserPublicationsForm()
     return render(request, f'{TEMPLATE_DIR}/pages/publications.html', {'publications_form':publications_form,
                                                                        'saved':saved})
+
+def list_user(request):
+    users = UserProfile.objects.all()
+    return render(request, f'{TEMPLATE_DIR}/pages/user_list.html', {'users':users})
