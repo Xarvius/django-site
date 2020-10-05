@@ -12,6 +12,7 @@ class UserProfile(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     phone = models.IntegerField()
     email = models.EmailField(max_length=254, default="-")
+    alias = models.CharField(max_length=60, unique=True)
     Engineer = "inz."
     PROFESSOR = "PROF."
     STATUS_IN = [
