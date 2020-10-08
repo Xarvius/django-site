@@ -11,7 +11,7 @@ class UserType(DjangoObjectType):
 class UserProfileType(DjangoObjectType):
     class Meta:
         model = UserProfile
-        fields  = ('id', 'first_name', 'last_name', 'user', 'phone', 'email', 'qualification', 'USOSlink')
+        fields  = ('id', 'first_name', 'last_name', 'user', 'phone', 'email', 'alias', 'qualification', 'USOSlink')
 
     # def resolve_repository_url(self, info):
     #     return self.repository_url
@@ -21,7 +21,7 @@ class UserFolderType(DjangoObjectType):
 
     class Meta:
         model = UserFolder
-        fields = ('name', 'user')
+        fields = ('id', 'name', 'user')
 
     def resolve_repository_url(self, info):
         return self.repository_url
@@ -67,34 +67,34 @@ class UserPublicationsType(DjangoObjectType):
         return self.repository_url
 
 class Query(graphene.ObjectType):
-    profile = graphene.Field(UserProfileType, id= graphene.ID())
+    profile = graphene.Field(UserProfileType, alias=graphene.String())
     profiles = graphene.List(UserProfileType)
-    folders = graphene.List(UserFolderType)
-    files = graphene.List(UserFilesType)
-    extras = graphene.List(UserExtrasType)
-    results = graphene.List(ResultsType)
+    folders = graphene.List(UserFolderType, id=graphene.ID())
+    files = graphene.List(UserFilesType, id=graphene.ID())
+    extras = graphene.List(UserExtrasType, id=graphene.ID())
+    results = graphene.List(ResultsType, id=graphene.ID())
     publications = graphene.List(UserPublicationsType, id=graphene.ID())
 
-    def resolve_profile(self, info, id):
+    def resolve_profile(self, info, alias):
         try:
-            return UserProfile.objects.get(user_id=id)
+            return UserProfile.objects.get(alias=alias)
         except UserProfile.DoesNotExist:
             return UserProfile.objects.none()
 
     def resolve_profiles(self, info, **kwargs):
         return UserProfile.objects.all()
 
-    def resolve_folders(self, info, **kwargs):
-        return UserFolder.objects.all()
+    def resolve_folders(self, info, id):
+        return UserFolder.objects.filter(user_id=id)
 
-    def resolve_files(self, info, **kwargs):
-        return UserFiles.objects.all()
+    def resolve_files(self, info, id):
+        return UserFiles.objects.filter(folder_id=id)
 
-    def resolve_extras(self, info, **kwargs):
-        return UserExtras.objects.all()
+    def resolve_extras(self, info, id):
+        return UserExtras.objects.filter(user_id=id)
 
-    def resolve_results(self, info, **kwargs):
-        return Results.objects.all()
+    def resolve_results(self, info, id):
+        return Results.objects.filter(user_id=id)
 
     def resolve_publications(self, info, id):
         return UserPublications.objects.filter(user_id=id)
