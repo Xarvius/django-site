@@ -31,7 +31,7 @@ class UserFilesType(DjangoObjectType):
 
     class Meta:
         model = UserFiles
-        fields = ('file', 'folder')
+        fields = ('file', 'folder', 'folder_id')
 
     def resolve_repository_url(self, info):
         return self.repository_url
@@ -71,7 +71,7 @@ class Query(graphene.ObjectType):
     profiles = graphene.List(UserProfileType)
     folders = graphene.List(UserFolderType, id=graphene.ID())
     files = graphene.List(UserFilesType, id=graphene.ID())
-    extras = graphene.List(UserExtrasType, id=graphene.ID())
+    extras = graphene.Field(UserExtrasType, id=graphene.ID())
     results = graphene.List(ResultsType, id=graphene.ID())
     publications = graphene.List(UserPublicationsType, id=graphene.ID())
 
@@ -91,7 +91,7 @@ class Query(graphene.ObjectType):
         return UserFiles.objects.filter(folder_id=id)
 
     def resolve_extras(self, info, id):
-        return UserExtras.objects.filter(user_id=id)
+        return UserExtras.objects.get(user_id=id)
 
     def resolve_results(self, info, id):
         return Results.objects.filter(user_id=id)

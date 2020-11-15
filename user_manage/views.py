@@ -65,13 +65,16 @@ def user_login(request):
 def user_profile(request):
     user = request.user
     instance = models.UserProfile.objects.get(user=user)
-    edited = False
+    edited = ""
     if request.method == 'POST':
-        profile_form = UserProfileForm(data=request.POST, instance=instance)
-        profile = profile_form.save(commit=False)
-        profile.user = user
-        profile.save()
-        edited = True
+        try:
+            profile_form = UserProfileForm(data=request.POST, instance=instance)
+            profile = profile_form.save(commit=False)
+            profile.user = user
+            profile.save()
+            edited = "Zapisano"
+        except ValueError:
+            edited = "Błąd formularza. Popraw błędy."
     else:
         profile_form = UserProfileForm(instance=instance)
     return render(request, f'{TEMPLATE_DIR}/pages/profile.html', {'profile_form':profile_form,
